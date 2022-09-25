@@ -109,6 +109,39 @@ if conn.is_connected():
         time.sleep(1.5)
         input("Press Enter to Continue.......")
 
+    def staffdetailer():
+        print("~"*90)
+        print("How you want to access data?")
+        print("1. Whole at once")
+        print("2. floor wise")
+        print()
+        os=int(input("How you want to access data? "))
+        print()
+        print()
+        if os==1:
+            print()
+            executer("select * from staff")
+            pr=allfetcher()
+            if len(pr)==0:
+                time.sleep(0.35)
+                print("No data found")
+            print("These are details of your staff")
+            print("id, Name, Address, Phone no., Email id, Job, Salary, Floor alloted")
+            for i in pr:
+                print(i)
+        elif os==2:
+            print()
+            llll=str(int(input("For which floor you would like to fetch data? : ")))
+            executer("select st_id, st_name, st_address, st_phno, st_emailid, st_job, st_salary from staff where st_floor="+llll+';')
+            pr=allfetcher()
+            print("These are details of your staff which works on floor number "+llll)
+            print("id, Name, Address, Phone no., Email id, Job, Salary")
+            for i in pr:
+                print(i)
+        time.sleep(1.5)
+        input("Press Enter to Continue.......")
+
+
     def checkout():
         executer("create table if not exists past_visitors(cust_name varchar(20) not null ,cust_address longtext not null, ph_no bigint(20) not null unique, c_email varchar(50) not null unique,Check_out_date date not null,bill_amt bigint(10) not null);")
         k=input("Enter checkout date yyyy-mm-dd : ")
@@ -349,7 +382,7 @@ if conn.is_connected():
         print()
         print("Welcome Manager")
         print()
-        print("\t1) CheckIn.\t\t2) Customer Details\n\t3) CheckOut\t\t4)Register Staff Member\n\t5) Logout\t\t6)See the Master key")
+        print("\t1) CheckIn.\t\t2) Customer Details\n\t3) CheckOut\t\t4) Register Staff Member\n\t5) Watch Staff details \t\t6) Logout \n\t7) See the Master key")
         print()
         ch1 = int(input("Select your choice  :  "))
         try:
@@ -365,13 +398,16 @@ if conn.is_connected():
             elif (ch1==4):
                 reg_staff()
                 manager()
-            elif(ch1 ==5):
+            elif ch1==5:
+                staffdetailer()
+                manager()
+            elif(ch1 ==6):
                 print()
                 print()
                 print('~'*90)
                 print('You have been logged out')
                 login()
-            elif ch1==6:
+            elif ch1==7:
                 time.sleep(0.7)
                 executer("select passw from pass where userid='Master_key';")
                 print("\nMaster key is → "+allfetcher()[0][-1]+"\n")
