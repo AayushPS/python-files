@@ -375,14 +375,47 @@ if conn.is_connected():
         else:
             print("Select Valid option")
             login()
-            
+
+    def updatestaffdetails():
+        x=input("Enter staff id for which you want to change existing details : ")
+        print("For What field you want to update details for "+x)
+        print("1) Name, 2) Address, 3) Phone number, 4) Email id, 5) Job, 6) Sallary, 7) Floor")
+        y=int(input("Select from the above given options for which field you want to change details : "))
+        o=""
+        if y==1:
+            o="st_name"
+        elif y==2:
+            o="st_address"
+        elif y==3:
+            o="st_phno"
+        elif y==4:
+            o="st_emailid"
+        elif y==5:
+            o="st_job"
+        elif y==6:
+            o="st_salary"
+        elif y==7:
+            o="st_floor"
+        else:
+            print("\nSelect appropriate option!!")
+            updatestaffdetails()
+        a=input("Enter updated value for "+o+" : ")
+        fc="update staff set "+o+"='{}' where st_id='{}'".format(a,x)
+        executer(fc)
+        conn.commit()
+        print("Staff Details Updated Sucessfully")
+        time.sleep(0.5)
+        input("Press Enter to continue.........")
+
+        
+
     def manager():
         print('~'*90)
         print('\t\t\tMAIN MENU')
         print()
         print("Welcome Manager")
         print()
-        print("\t1) CheckIn.\t\t2) Customer Details\n\t3) CheckOut\t\t4) Register Staff Member\n\t5) Watch Staff details \t\t6) Logout \n\t7) See the Master key")
+        print("\t1) CheckIn.\t\t2) Customer Details\n\t3) CheckOut\t\t4) Register Staff Member\n\t5) Watch Staff details \t\t6) Update Staff Details \n\t7) Logout \t\t8) See the Master key")
         print()
         ch1 = int(input("Select your choice  :  "))
         try:
@@ -401,13 +434,16 @@ if conn.is_connected():
             elif ch1==5:
                 staffdetailer()
                 manager()
-            elif(ch1 ==6):
+            elif ch1==6:
+                updatestaffdetails()
+                manager()
+            elif(ch1 ==7):
                 print()
                 print()
                 print('~'*90)
                 print('You have been logged out')
                 login()
-            elif ch1==7:
+            elif ch1==8:
                 time.sleep(0.7)
                 executer("select passw from pass where userid='Master_key';")
                 print("\nMaster key is → "+allfetcher()[0][-1]+"\n")
