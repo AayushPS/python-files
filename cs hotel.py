@@ -206,6 +206,7 @@ if conn.is_connected():
             login()
             
     def passupdater(key):
+        global xyz
         print("\n"+"~"*90)
         executer("select passw from pass where userid='Master_key';")
         if key==allfetcher()[0][-1]:
@@ -218,8 +219,7 @@ if conn.is_connected():
                 a=input("Enter old user name : ")
                 b=input("Enter old Password : ")
                 passcheckerm(a,b)
-                
-                if xyz==1:
+                if xyz == 1:
                     print("\n\nChanging Userid first\n")
                     j1=input("Enter new user name for Manager : ")
                     executer("update pass set userid = '{}' where login_type = '{}'".format(j1,'Manager'))
@@ -259,7 +259,7 @@ if conn.is_connected():
         k=allfetcher()
         executer("select passw from pass where login_type='Manager' ;")    ####
         r=allfetcher()
-        if a==k[0][0] and r[0][0]==b:
+        if a==k[0][0] and b==r[0][0]:
             global xyz
             xyz=1
         else:
@@ -273,7 +273,7 @@ if conn.is_connected():
         k=allfetcher()
         executer("select passw from pass where login_type='Manager' ;")    ####
         r=allfetcher()
-        if a==k[0][0] and r[0][0]==b:
+        if a==k[0][0] and b==r[0][0]:
             manager()
         else:
             print("\nPassword and User ID combination are inappropriate")
@@ -286,7 +286,8 @@ if conn.is_connected():
         k=allfetcher()
         executer("select passw from pass where login_type='Receptionist';")
         r=allfetcher()
-        if a==k[0][0] and r[0][0]==b:
+        print(k[0][0])
+        if a==k[0][0] and b==r[0][0]:
             global xyz
             xyz=6
         else:
@@ -300,7 +301,7 @@ if conn.is_connected():
         k=allfetcher()
         executer("select passw from pass where login_type='Receptionist';")
         r=allfetcher()
-        if a==k[0][0] and r[0][0]==b:
+        if a==k[0][0] and b==r[0][0]:
             receptionist()
         else:
             print("\nPassword and User ID combination are inappropriate")
