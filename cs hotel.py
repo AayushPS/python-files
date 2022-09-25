@@ -14,7 +14,6 @@ if conn.is_connected():
     def allfetcher():
         return co.fetchall()
 
-
     def reg_staff():    
         s_name=input("Enter staff member's name : ")
         s_ph=int(input("Enter staff member's phone number : "))
@@ -63,8 +62,6 @@ if conn.is_connected():
         print("ROOM BOOKED SUCCESSFULLY !!!")
         time.sleep(1.5)
 
-
-
     def cust_details_output():
         print("~"*90)
         print("How you want to access data?")
@@ -112,8 +109,6 @@ if conn.is_connected():
         time.sleep(1.5)
         input("Press Enter to Continue.......")
 
-
-
     def checkout():
         executer("create table if not exists past_visitors(cust_name varchar(20) not null ,cust_address longtext not null, ph_no bigint(20) not null unique, c_email varchar(50) not null unique,Check_out_date date not null,bill_amt bigint(10) not null);")
         k=input("Enter checkout date yyyy-mm-dd : ")
@@ -140,8 +135,6 @@ if conn.is_connected():
         print("\n\nCheckout Successful")
         time.sleep(1)
         input("Press Enter to Continue.......")
-
-
 
     def checkin():
         time.sleep(1)
@@ -177,9 +170,6 @@ if conn.is_connected():
         conn.commit()
         time.sleep(1.25)
 
-
-
-
     def passcreater(key12): 
         if key12=="147258369":
             s="create table if not exists pass(login_type varchar(20) not null , userid varchar(20) not null unique primary key , passw varchar(25) not null);"   ###
@@ -201,7 +191,7 @@ if conn.is_connected():
                 executer("insert into pass(login_type , userid , passw) values('{}','{}','{}')".format(t,u,p))
                 conn.commit()
                 print("~"*90)
-                print("Initial Credendentials created, if you wish to cahange the credentials choose update credentials in the login screen")
+                print("Initial Credentials created, if you wish to cahange the credentials choose update credentials in the login screen")
                 print("Redirecting to login screen.........")
                 time.sleep(1)
             except :
@@ -228,7 +218,7 @@ if conn.is_connected():
                 a=input("Enter old user name : ")
                 b=input("Enter old Password : ")
                 passcheckerm(a,b)
-                abc=0
+                
                 if xyz==1:
                     print("\n\nChanging Userid first\n")
                     j1=input("Enter new user name for Manager : ")
@@ -243,7 +233,6 @@ if conn.is_connected():
                 a=input("Enter old user name : ")
                 b=input("Enter old Password : ")
                 passcheckerr(a,b)
-                abc=0
                 if xyz==6:
                     print("\n\nChanging Userid first\n")
                     j1=input("Enter new user name for Receptionist : ")
@@ -321,8 +310,6 @@ if conn.is_connected():
 
     def login():
         print('~'*90)
-        global abc
-        ch,abc=0,0
         print("\t\t\tWelcome to Login Screen")
         print('~'*90)
         print("\t\tChoose any from the folloing options using their number assigned")
@@ -347,7 +334,6 @@ if conn.is_connected():
             j=input("Enter Master key for this system : ")
             passupdater(j)        
         elif log==5:
-            ch==0
             print()
             print('~'*90)
             print("\t\t\tThanks for service")
@@ -379,7 +365,6 @@ if conn.is_connected():
                 reg_staff()
                 manager()
             elif(ch1 ==5):
-                abc=0
                 print()
                 print()
                 print('~'*90)
@@ -411,7 +396,6 @@ if conn.is_connected():
             time.sleep(1)
             manager()
 
-
     def receptionist():
         print('~'*90)
         print('\t\t\tMAIN MENU')
@@ -432,7 +416,6 @@ if conn.is_connected():
                 checkout()
                 receptionist()
             elif(ch1 ==4):
-                abc=0
                 print()
                 print()
                 print('~'*90)
@@ -477,19 +460,9 @@ if conn.is_connected():
             k=str(i)
             s=i_3+k+i_4
             executer(s)
-
-
-
         i_5="create table if not exists staff"
         i_6=" (st_id varchar(3) not null primary key, st_name varchar(20) not null,st_address longtext not null, st_phno bigint(20) not null unique, st_emailid varchar(100) not null unique, st_job varchar(20) not null,st_salary int(9) not null,st_floor int(4) not null);"
         s=i_5+i_6
         executer(s)
-
-
-
-            
         login()
-
-
     initiation()
-
