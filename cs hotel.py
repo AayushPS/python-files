@@ -23,7 +23,7 @@ if conn.is_connected():
         s_salary=int(input("Salary : "))
         s_floor_allotted=int(input("Enter floor allotted to staff member : "))
         id_operator()
-        executer('select * from counter;')
+        executer('select * from counter1;')
         check=allfetcher()
         sid="S"+str(len(check))
         m="insert into staff"+ "(st_id,st_name,st_address,st_phno,st_emailid,st_job,st_salary,st_floor) values ('{}','{}','{}',{},'{}','{}',{},{})".format(sid,s_name,s_add,s_ph,s_email,s_pos,s_salary,s_floor_allotted)
