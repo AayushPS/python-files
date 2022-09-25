@@ -368,12 +368,16 @@ if conn.is_connected():
         try:
             if(ch1 == 1):
                 checkin()
+                manager()
             elif (ch1 == 2):
                 cust_details_output()
+                manager()
             elif(ch1 == 3):
                 checkout()
+                manager()
             elif (ch1==4):
                 reg_staff()
+                manager()
             elif(ch1 ==5):
                 abc=0
                 print()
@@ -396,16 +400,17 @@ if conn.is_connected():
                     pass
                 else:
                     key_change()
+                manager()
             else:
                 print("INVALID INPUT !! TRY AGAIN !!\n")
+                manager()
         except Exception as e:
             print(e)
             print("~"*90)
             print("ERROR! GOING BACK TO MAIN MENU")
             time.sleep(1)
-            pass
-        finally:
             manager()
+
 
     def receptionist():
         print('~'*90)
@@ -419,10 +424,13 @@ if conn.is_connected():
         try:
             if(ch1 == 1):
                 checkin()
+                receptionist()
             elif (ch1 == 2):
                 cust_details_output()
+                receptionist()
             elif(ch1 == 3):
                 checkout()
+                receptionist()
             elif(ch1 ==4):
                 abc=0
                 print()
@@ -432,13 +440,12 @@ if conn.is_connected():
                 login()
             else:
                 print("INVALID INPUT !! TRY AGAIN !!\n")
+                receptionist()
         except Exception as e:
             print(e)
             print("~"*90)
             print("ERROR! GOING BACK TO MAIN MENU")
             time.sleep(1)
-            pass
-        finally:
             receptionist()
 
     def initiation():
