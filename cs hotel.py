@@ -60,33 +60,44 @@ if conn.is_connected():
         print("Your Room No. : ",rno)
         print()
         print("ROOM BOOKED SUCCESSFULLY !!!")
-        time.sleep(1.5)
+        time.sleep(1)
 
     def cust_details_output():
         print("~"*90)
         print("How you want to access data?")
         print("1. Whole at once")
-        print("2. floor wise")
+        print("2. Floor wise")
         print()
-        os=int(input("How you want to access data? "))
+        os=int(input("Your choice : "))
         print()
         print()
         s="select * from floor"
         if os==1:
             data_found=0
-            for i in range(1,i_ques2+1):                
+            new_var=0
+            for i in range(1,i_ques2+1):
+                st=''
                 k=str(i)
                 j=s+k
                 executer(j)
                 d=allfetcher()
                 if len(d)==0:
                     pass
+                elif len(d)!=0 and new_var==0:
+                    new_var=1
+                    data_found=1
+                    print("Room No.|Customer Name|Customer Address|Phone No.|Email ID|Room Type|Check in date|No. of days booked for|\n")
+                    print("• This is the data for FLOOR"+k)
+                    for val in d[0]:
+                        st=st+str(val)+' | '
+                    print('→',st)
+                    print()
                 else:
                     data_found=1
                     print("• This is the data for FLOOR"+k)
-                    print("Room no., Customer name, Customer address, Phone no., Customer email, Room Type, Check in date, No. of days booked for")
-                    for on in d:
-                        print('→',on)
+                    for val in d[0]:
+                        st=st+str(val)+' | '
+                    print('→',st)
                     print()
             if data_found==0:
                 time.sleep(0.35)
@@ -100,13 +111,14 @@ if conn.is_connected():
             if len(e)==0:
                 print("There's no room booked at this floor right now.")
             else:
-                print("Room no., Customer name, Customer address, Phone no., Customer email, Room Type, Check in date, No. of days booked for")
-                for on in e:
-                    print('→',on)
+                print("Room No.|Customer Name|Customer Address|Phone No.|Email ID|Room Type|Check in date|No. of days booked for|\n")
+                for val in e[0]:
+                    st=st+str(val)+' | '
+                print('→',st)
                 print()
         else:
             print("Wrong input!\nGoing back to Main Menu........")
-        time.sleep(1.5)
+        time.sleep(1.1)
         input("Press Enter to Continue.......")
 
     def staffdetailer():
@@ -117,29 +129,44 @@ if conn.is_connected():
         print()
         os=int(input("How you want to access data? "))
         print()
-        print()
         if os==1:
-            print()
+            l=0
             executer("select * from staff")
             pr=allfetcher()
-            if len(pr)==0:
-                time.sleep(0.35)
-                print("No data found")
-            print("These are details of your staff")
-            print("id, Name, Address, Phone no., Email id, Job, Salary, Floor alloted")
-            for i in pr:
-                print(i)
+            for i in range(2):
+                if len(pr)==0:
+                    time.sleep(0.35)
+                    print("No data found")
+                elif len(pr)!=0 and l==0:
+                    l=1
+                    print("•ID|Name|Address|Phone No.|Email ID|Job|Salary|Floor alloted|")
+                else:
+                    print("\n•These are details of your staff")
+                    for i in pr:
+                        st1=''
+                        for j in i:
+                            st1=st1+str(j)+' | '
+                        print('→',st1)
+                
         elif os==2:
-            print()
             llll=str(int(input("For which floor you would like to fetch data? : ")))
             executer("select st_id, st_name, st_address, st_phno, st_emailid, st_job, st_salary from staff where st_floor="+llll+';')
             pr=allfetcher()
-            print("These are details of your staff which works on floor number "+llll)
-            print("id, Name, Address, Phone no., Email id, Job, Salary")
-            for i in pr:
-                print(i)
-        time.sleep(1.5)
-        input("Press Enter to Continue.......")
+            if len(pr)==0:
+                print("No data found")
+            else:
+                count=0
+                print("\nThese are details of your staff which works on floor number "+llll)
+                print("•ID|Name|Address|Phone No.|Email ID|Job|Salary|\n")
+                while count<len(pr):
+                    st2=''
+                    for i in pr[count]:
+                        st2=st2+str(i)+' | '
+                    print('→',st2)
+                    count+=1
+                
+        time.sleep(1.15)
+        input("\n\nPress Enter to Continue.......")
 
 
     def checkout():
@@ -173,7 +200,7 @@ if conn.is_connected():
         time.sleep(1)
         print('~'*90)
         print("\t\t\tRATE LIST")
-        print("1) Dulex Room : 1500/-\t\t \t2) Dulex Room (AC) : 2000/- \n\n3) Regular Room : 800/-\t\t \t4) Regular Room (AC) : 1100/-\n\n5) Luxary 5 Star Room (AC) : 5000/-")
+        print("1) Dulex Room : 1500/-\t\t \t2) Dulex Room (AC) : 2000/- \n3) Regular Room : 800/-\t\t \t4) Regular Room (AC) : 1100/-\n5) Luxary 5 Star Room (AC) : 5000/-")
         while True:
             print()
             i_ques3=int(input("Enter the type of room you are looking for : "))
@@ -201,7 +228,9 @@ if conn.is_connected():
         new_key=input("Enter new Master Key : ")
         executer("update pass set passw='{}' where userid='{}' ".format(new_key,'Master_key'))
         conn.commit()
-        time.sleep(1.25)
+        print("Master Key updated Successfully!\n")
+        print("Redirecting to login screen.........")
+        time.sleep(1)
 
     def passcreater(key12): 
         if key12=="147258369":
@@ -243,7 +272,7 @@ if conn.is_connected():
         print("\n"+"~"*90)
         executer("select passw from pass where userid='Master_key';")
         if key==allfetcher()[0][-1]:
-            print("\nFor which login_type you want to update credentials? :")
+            print("\nFor which login_type you want to update credentials? : ")
             print("1. Manager")
             print("2. Receptionist\n")
             i=int(input("Your choice : "))
@@ -253,15 +282,19 @@ if conn.is_connected():
                 b=input("Enter old Password : ")
                 passcheckerm(a,b)
                 if xyz == 1:
-                    print("\n\nChanging Userid first\n")
+                    print("\n\nChanging Userid first")
                     j1=input("Enter new user name for Manager : ")
                     executer("update pass set userid = '{}' where login_type = '{}'".format(j1,'Manager'))
                     conn.commit()
-                    print("Now updating password")
+                    print("\nNow updating password")
                     j2=input("Enter new password for Manager : ")
                     executer("update pass set passw = '{}' where login_type = '{}'".format(j2,'Manager'))
                     conn.commit()
                     xyz=0
+                print("\nUser ID and Password successfully changed!")
+                print("Redirecting to login screen........")
+                time.sleep(1)
+                    
             elif i==2:
                 a=input("Enter old user name : ")
                 b=input("Enter old Password : ")
@@ -271,11 +304,14 @@ if conn.is_connected():
                     j1=input("Enter new user name for Receptionist : ")
                     executer("update pass set userid = '{}' where login_type = '{}'".format(j1,'Receptionist'))
                     conn.commit()
-                    print("Now updating password")
+                    print("\nNow updating password")
                     j2=input("Enter new password for Receptionist : ")
                     executer("update pass set passw = '{}' where login_type = '{}'".format(j2,'Receptionist'))
                     conn.commit()
                     xyz=0
+                print("\nUser ID and Password successfully changed!")
+                print("Redirecting to login screen........")
+                time.sleep(1)
             else:
                 print("Wrong input!\nRedirecting to login screen........")
                 time.sleep(1)
@@ -284,6 +320,7 @@ if conn.is_connected():
             print("\t\t\tMaster key invalid")
             print("Redirecting to login screen........")
             time.sleep(1)
+            print()
             login()
 
 
@@ -362,7 +399,7 @@ if conn.is_connected():
             b=input("Enter Password : ")
             passcheckerrcall(a,b)
         elif log==3:
-            j=input("Enter Master key for this system : ")
+            j=input("Enter the Product Key for this system : ")  #Product key coz master key isn't defined yet.
             passcreater(j)
         elif log==4:
             j=input("Enter Master key for this system : ")
@@ -378,34 +415,35 @@ if conn.is_connected():
 
     def updatestaffdetails():
         x=input("Enter staff id for which you want to change existing details : ")
-        print("For What field you want to update details for "+x)
-        print("1) Name, 2) Address, 3) Phone number, 4) Email id, 5) Job, 6) Sallary, 7) Floor")
+        print("\nFor What field you want to update details for "+x)
+        print("1) Name, 2) Address, 3) Phone number, 4) Email id, 5) Job, 6) Sallary, 7) Floor\n")
         y=int(input("Select from the above given options for which field you want to change details : "))
         o=""
         if y==1:
-            o="st_name"
+            o,m="st_name","Name"
         elif y==2:
-            o="st_address"
+            o,m="st_address","Address"
         elif y==3:
-            o="st_phno"
+            o,m="st_phno","Ph No."
         elif y==4:
-            o="st_emailid"
+            o,m="st_emailid","Email ID"
         elif y==5:
-            o="st_job"
+            o,m="st_job","Job"
         elif y==6:
-            o="st_salary"
+            o,m="st_salary","Salary"
         elif y==7:
-            o="st_floor"
+            o,m="st_floor","Floor Allotted"
         else:
             print("\nSelect appropriate option!!")
             updatestaffdetails()
-        a=input("Enter updated value for "+o+" : ")
+        a=input("\nEnter updated value for "+m+" : ")
         fc="update staff set "+o+"='{}' where st_id='{}'".format(a,x)
         executer(fc)
         conn.commit()
-        print("Staff Details Updated Sucessfully")
+        print("\n\nStaff Details Updated Sucessfully")
         time.sleep(0.5)
         input("Press Enter to continue.........")
+        
 
         
 
@@ -415,7 +453,7 @@ if conn.is_connected():
         print()
         print("Welcome Manager")
         print()
-        print("\t1) CheckIn.\t\t2) Customer Details\n\t3) CheckOut\t\t4) Register Staff Member\n\t5) Watch Staff details \t\t6) Update Staff Details \n\t7) Logout \t\t8) See the Master key")
+        print("\t1) CheckIn.\t\t2) Customer Details\n\t3) CheckOut\t\t4) Register Staff Member\n\t5) Staff members' details \t6) Update Staff Details \n\t7) Logout \t\t8) Master key")
         print()
         ch1 = int(input("Select your choice  :  "))
         try:
@@ -526,7 +564,7 @@ if conn.is_connected():
         executer(i_2)
         executer('use '+i_1+';')
         global i_ques2
-        i_ques2=int(input("Enter number of floors in your hotel :"))
+        i_ques2=int(input("Enter number of floors in your hotel : "))
         i_3="create table if not exists floor"
         i_4=" (room_no int(3) not null primary key, cust_name varchar(20) not null,cust_address longtext not null, ph_no bigint(20) not null unique, c_email varchar(100) unique, room_type int(1) not null,Check_in_date date not null, Day_duration int(5) not null);"
         for i in range (1,i_ques2+1):
