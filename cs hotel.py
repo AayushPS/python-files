@@ -3,8 +3,6 @@ import time
 conn=m.connect(host='localhost',user='root',passwd='190404')
 xyz=0
 
-
-
 if conn.is_connected():
     co=conn.cursor()
 
