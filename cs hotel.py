@@ -1,5 +1,4 @@
 from asyncio import exceptions
-from os import mkdir
 from sqlite3 import ProgrammingError
 import mysql.connector as m
 import time
@@ -597,8 +596,8 @@ if conn.is_connected():
         conn.commit()
         a=1
         for i in range (1,i_ques2+1):
-            for j in (1,n_roomperfloorpertype+1):
-                for e in (1,1+m):
+            for j in range (1,n_roomperfloorpertype+1):
+                for e in range (1,1+m):
                     s=str("create table room"+a+"(cust_name varchar(20), cust_address longtext, ph_no bigint(20) unique, c_email varchar(100) unique, room_type int(1) not null, floor int(2) not null, Check_in_date date, Day_duration int(5));")
                     executer(s)
                     executer("insert into room"+a+"(room_type,floor) values({},{})".format(j,i))
