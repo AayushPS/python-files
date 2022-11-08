@@ -1,3 +1,6 @@
+from asyncio import exceptions
+from os import mkdir
+from sqlite3 import ProgrammingError
 import mysql.connector as m
 import time
 conn=m.connect(host='localhost',user='root',passwd='190404')
@@ -11,6 +14,7 @@ if conn.is_connected():
     
     def allfetcher():
         return co.fetchall()
+
 
     def reg_staff():    
         s_name=input("Enter staff member's name : ")
@@ -197,8 +201,8 @@ if conn.is_connected():
     def checkin():
         time.sleep(1)
         print('~'*90)
-        print("\t\t\tRATE LIST")
-        print("1) Dulex Room : 1500/-\t\t \t2) Dulex Room (AC) : 2000/- \n3) Regular Room : 800/-\t\t \t4) Regular Room (AC) : 1100/-\n5) Luxary 5 Star Room (AC) : 5000/-")
+        print("\t\t\tRATE LIST")    
+        print("1) ",roomn[1]," : ",roomd[1],"/-\t\t\t2) ",roomn[2]," : ",roomd[2],"/- \n3) ",roomn[3]," : ",roomd[3],"/-\t\t\t4) ",roomn[4]," : ",roomd[4],"/-\n5) ",roomn[5]," : ",roomd[5],"/-")
         while True:
             print()
             i_ques3=int(input("Enter the type of room you are looking for : "))
@@ -379,6 +383,7 @@ if conn.is_connected():
 
     def login():
         print('~'*90)
+        print("\t\t\t",i_1,"Hotel")
         print("\t\t\tWelcome to Login Screen")
         print('~'*90)
         print("\t\tChoose any from the folloing options using their number assigned")
@@ -442,8 +447,31 @@ if conn.is_connected():
         time.sleep(0.5)
         input("Press Enter to continue.........")
         
-
-        
+    def setprice():
+        executer("select * from hotel;")
+        k=allfetcher()
+        c=k[0][2]
+        global roomd
+        roomd={}
+        print("These are the room types")
+        print("1) Dulex Room\t\t \t2) Dulex Room (AC)\n3) Regular Room\t\t \t4) Regular Room (AC)\n5) Luxary 5 Star Room (AC)")
+        for i in c:
+           mk=input("Enter price for room "+i+": ")
+           roomd[i]=mk
+        global roomn
+        roomn={}
+        for i in c:
+            if i==1:
+                roomn[1]='Dulex Room'
+            elif i==2:
+                roomn[2]='Dulex Room (AC)'
+            elif i==3:
+                roomn[3]='Regular Room'
+            elif i==4:
+                roomn[4]='Regular Room (AC)'
+            elif i==5:
+                roomn[5]='Luxary 5 Star Room (AC)'
+                
 
     def manager():
         print('~'*90)
@@ -451,7 +479,7 @@ if conn.is_connected():
         print()
         print("Welcome Manager")
         print()
-        print("\t1) CheckIn.\t\t2) Customer Details\n\t3) CheckOut\t\t4) Register Staff Member\n\t5) Staff members' details \t6) Update Staff Details \n\t7) Logout \t\t8) Master key")
+        print("\t1) CheckIn.\t\t2) Customer Details\n\t3) CheckOut\t\t4) Register Staff Member\n\t5) Staff members' details \t6) Update Staff Details \n\t7)Set/Update Price List for rooms \t\t8) Logout \n\t9) Master key")
         print()
         ch1 = int(input("Select your choice  :  "))
         try:
@@ -473,13 +501,16 @@ if conn.is_connected():
             elif ch1==6:
                 updatestaffdetails()
                 manager()
-            elif(ch1 ==7):
+            elif ch1==7:
+                setprice()
+                manager()
+            elif(ch1 ==8):
                 print()
                 print()
                 print('~'*90)
                 print('You have been logged out')
                 login()
-            elif ch1==8:
+            elif ch1==9:
                 time.sleep(0.7)
                 executer("select passw from pass where userid='Master_key';")
                 print("\nMaster key is → "+allfetcher()[0][-1]+"\n")
@@ -539,8 +570,45 @@ if conn.is_connected():
             print("ERROR! GOING BACK TO MAIN MENU")
             time.sleep(1)
             receptionist()
+    
+    def hoteldata():
+        global i_2
+        i_2='create database '+i_1+';'        
+        executer(i_2)
+        executer("use "+i_1+";")
+        time.sleep(1)
+        print("\t\t It seems you are entering details for a new hotel, so youve been redirected here")
+        time.sleep(1.5)
+        print("Enter the following details so we can create database for your hotel")
+        global i_ques2
+        i_ques2=int(input("Enter number of floors in your hotel : "))
+        n_roomperfloorpertype=int(input("Enter number of rooms you have per floor per type of room: "))
+        print("1) Dulex Room\t\t \t2) Dulex Room (AC)\n3) Regular Room\t\t \t4) Regular Room (AC)\n5) Luxary 5 Star Room (AC)")
+        r_types=str(input("Type of rooms your hotel has from the above following? (Enter each digit corresponding to each room "))
+        l=list(r_types)
+        m=0
+        k=[]
+        for i in l:
+            if ord(i) in (49,50,51,52,53):
+                k.append(i)
+                m=m+1
+        executer("create table hotel(n_floors int(3) NOT NULL, roomperfloor int(3) NOT NULL, roomtypes int(1) Default '5' check (roomtypes<6);")
+        kl="insert into hotel(n_floors, roomperfloor, roomtypes) values('{}',{},{},{})".format(i_ques2,n_roomperfloorpertype,k)
+        conn.commit()
+        a=1
+        for i in range (1,i_ques2+1):
+            for j in (1,n_roomperfloorpertype+1):
+                for e in (1,1+m):
+                    s=str("create table room"+a+"(cust_name varchar(20), cust_address longtext, ph_no bigint(20) unique, c_email varchar(100) unique, room_type int(1) not null, floor int(2) not null, Check_in_date date, Day_duration int(5));")
+                    executer(s)
+                    executer("insert into room"+a+"(room_type,floor) values({},{})".format(j,i))
+                    conn.commit
+                    a+=1
 
     def initiation():
+        executer("create database if not exists hotels;")
+        executer("Use hotels;")
+        executer("create table if not exists hotel (hotel_name varchar(15) NOT NULL)")
         key=147258369
         print('~'*90)
         print("\t\t\tWelcome to Hotel Management System")
@@ -557,14 +625,14 @@ if conn.is_connected():
             print("thanks for service")
             return("")
         global i_1
-        i_1=input("Enter Hotel's name : ")                      # Hotel name take any!!!
-        i_2='create database if not exists '+i_1+';'        
-        executer(i_2)
-        executer('use '+i_1+';')
+        i_1=input("Enter your Hotel's name : ")                      # Hotel name take any!!!
+        try:
+            co.execute(str("use "+i_1+";"))
+        except ProgrammingError:
+            hoteldata()
+        i_3="create table if not exists floors"
+        i_4=" (floorno int(3) not null primary key, room_no int(3) not null);"
         global i_ques2
-        i_ques2=int(input("Enter number of floors in your hotel : "))
-        i_3="create table if not exists floor"
-        i_4=" (room_no int(3) not null primary key, cust_name varchar(20) not null,cust_address longtext not null, ph_no bigint(20) not null unique, c_email varchar(100) unique, room_type int(1) not null,Check_in_date date not null, Day_duration int(5) not null);"
         for i in range (1,i_ques2+1):
             k=str(i)
             s=i_3+k+i_4
